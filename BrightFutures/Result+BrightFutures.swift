@@ -15,7 +15,7 @@ extension ResultType {
     /// if the first operation result is a .Success
     /// If a regular `map` was used, the result would be `Result<Future<U>>`.
     /// The implementation of this function uses `map`, but then flattens the result before returning it.
-    public func flatMap<U>(@noescape f: Value -> Future<U, Error>) -> Future<U, Error> {
+    public func flatMap<U>(f: @noescape (Value) -> Future<U, Error>) -> Future<U, Error> {
         return analysis(ifSuccess: {
             return f($0)
         }, ifFailure: {

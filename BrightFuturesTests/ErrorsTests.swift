@@ -23,7 +23,7 @@
 import XCTest
 import BrightFutures
 
-enum TestError: ErrorType {
+enum TestError: ErrorProtocol {
     case JustAnError
     case JustAnotherError
 }

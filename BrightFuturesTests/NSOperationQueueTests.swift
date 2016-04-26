@@ -35,7 +35,7 @@ class NSOperationQueueTests: XCTestCase {
             }
         }
         
-        self.waitForExpectationsWithTimeout(5, handler: nil)
+        self.waitForExpectations(withTimeout: 5, handler: nil)
         XCTAssertEqual(i, 0)
     }
     

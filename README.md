@@ -1,6 +1,8 @@
 BrightFutures
 =============
 
+# This is a work in progress of migrating to Swift 3. This branch is currently severely broken.
+
 How do you leverage the power of Swift to write great asynchronous code? BrightFutures is our answer.
 
 BrightFutures implements proven [functional concepts](http://en.wikipedia.org/wiki/Futures_and_promises) in Swift to provide a powerful alternative to completion blocks and support typesafe error handling in asynchronous code.

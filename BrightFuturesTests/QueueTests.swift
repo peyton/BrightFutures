@@ -27,7 +27,7 @@ import Result
 class QueueTests: XCTestCase {
 
     func testMain() {
-        let e = self.expectationWithDescription("")
+        let e = self.expectation(withDescription: "")
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             Queue.main.sync {
                 XCTAssert(NSThread.isMainThread(), "executing on the main queue should happen on the main thread")
@@ -35,7 +35,7 @@ class QueueTests: XCTestCase {
             e.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+        self.waitForExpectations(withTimeout: 2, handler: nil)
     }
     
     func testSync() {
@@ -79,14 +79,14 @@ class QueueTests: XCTestCase {
     
     func testAsync() {
         var res = 2
-        let e = self.expectationWithDescription("")
+        let e = self.expectation(withDescription: "")
         Queue.global.async {
-            NSThread.sleepForTimeInterval(1.0)
+            NSThread.sleep(forTimeInterval: 1.0)
             res *= 2
             e.fulfill()
         }
         res += 2
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+        self.waitForExpectations(withTimeout: 2, handler: nil)
         XCTAssertEqual(res, 8, "async should not execute immediately")
     }
     
@@ -94,28 +94,28 @@ class QueueTests: XCTestCase {
         // unfortunately, the compiler is not able to figure out that we want the
         // future-returning async method
         let f: Future<String, NoError> = Queue.global.async({
-            NSThread.sleepForTimeInterval(1.0)
+            NSThread.sleep(forTimeInterval: 1.0)
             return "fibonacci"
         })
         
-        let e = self.expectationWithDescription("")
+        let e = self.expectation(withDescription: "")
         f.onSuccess { val in
             XCTAssertEqual(val, "fibonacci", "the future should succeed with the value from the async block")
             e.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+        self.waitForExpectations(withTimeout: 2, handler: nil)
     }
     
     func testAfter() {
         var res = 2
-        let e = self.expectationWithDescription("")
+        let e = self.expectation(withDescription: "")
         Queue.global.after(.In(1.0)) {
             res *= 2
             e.fulfill()
         }
         res += 2
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+        self.waitForExpectations(withTimeout: 2, handler: nil)
         XCTAssertEqual(res, 8, "delay should not execute immediately")
     }
 
@@ -126,13 +126,13 @@ class QueueTests: XCTestCase {
             return "fibonacci"
         }
         
-        let e = self.expectationWithDescription("")
+        let e = self.expectation(withDescription: "")
         f.onSuccess { val in
             XCTAssertEqual(val, "fibonacci", "the future should succeed with the value from the async block")
             e.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+        self.waitForExpectations(withTimeout: 2, handler: nil)
     }
 
 }

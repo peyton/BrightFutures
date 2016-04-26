@@ -26,7 +26,7 @@ import Result
 /// An enum representing every possible error for errors returned by BrightFutures
 /// A `BrightFuturesError` can also wrap an external error (e.g. coming from a user defined future)
 /// in its `External` case. `BrightFuturesError` has the type of the external error as its generic parameter.
-public enum BrightFuturesError<E: ErrorType>: ErrorType {
+public enum BrightFuturesError<E: ErrorProtocol>: ErrorProtocol {
     
     case NoSuchElement
     case InvalidationTokenInvalidated

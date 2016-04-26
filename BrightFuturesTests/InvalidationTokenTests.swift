@@ -49,11 +49,11 @@ class InvalidationTokenTests: XCTestCase {
         Queue.global.async {
             token.invalidate()
             p.success(2)
-            NSThread.sleepForTimeInterval(0.2); // make sure onSuccess is not called
+            NSThread.sleep(forTimeInterval: 0.2); // make sure onSuccess is not called
             e.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+        self.waitForExpectations(withTimeout: 2, handler: nil)
     }
     
     func testNonInvalidatedSucceededFutureOnSuccess() {
@@ -65,7 +65,7 @@ class InvalidationTokenTests: XCTestCase {
             e.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+        self.waitForExpectations(withTimeout: 2, handler: nil)
     }
     
     func testNonInvalidatedSucceededFutureOnComplete() {
@@ -77,7 +77,7 @@ class InvalidationTokenTests: XCTestCase {
             e.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+        self.waitForExpectations(withTimeout: 2, handler: nil)
     }
     
     func testNonInvalidatedFailedFutureOnFailure() {
@@ -89,7 +89,7 @@ class InvalidationTokenTests: XCTestCase {
             e.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+        self.waitForExpectations(withTimeout: 2, handler: nil)
     }
     
     func testStress() {
@@ -107,17 +107,17 @@ class InvalidationTokenTests: XCTestCase {
             let e = self.expectation()
             future { () -> Bool in
                 let sleep: NSTimeInterval = NSTimeInterval(arc4random() % 100) / 100000.0
-                NSThread.sleepForTimeInterval(sleep)
+                NSThread.sleep(forTimeInterval: sleep)
                 return true
             }.onSuccess(token.validContext(q.context)) { _ in
                 XCTAssert(!token.isInvalid)
                 XCTAssertEqual(currentI, counter.i, "onSuccess should only get called if the counter did not increment")
             }.onComplete(Queue.global.context) { _ in
-                NSThread.sleepForTimeInterval(0.0001);
+                NSThread.sleep(forTimeInterval: 0.0001);
                 e.fulfill()
             }
             
-            NSThread.sleepForTimeInterval(0.0005)
+            NSThread.sleep(forTimeInterval: 0.0005)
             
             q.sync {
                 token.invalidate()
@@ -125,7 +125,7 @@ class InvalidationTokenTests: XCTestCase {
             }
         }
         
-        self.waitForExpectationsWithTimeout(5, handler: nil)
+        self.waitForExpectations(withTimeout: 5, handler: nil)
     }
     
 }

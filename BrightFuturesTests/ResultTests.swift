@@ -120,7 +120,7 @@ class ResultTests: XCTestCase {
             e.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+        self.waitForExpectations(withTimeout: 2, handler: nil)
     }
     
     func testFlatMapFutureFailure() {
@@ -138,7 +138,7 @@ class ResultTests: XCTestCase {
             e.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+        self.waitForExpectations(withTimeout: 2, handler: nil)
     }
     
     func testSequenceSuccess() {
@@ -213,11 +213,11 @@ class ResultTests: XCTestCase {
     }
 }
 
-enum MathError: ErrorType {
+enum MathError: ErrorProtocol {
     case DivisionByZero
 }
 
-func divide(a: Int, _ b: Int) -> Result<Int, MathError> {
+func divide(_ a: Int, _ b: Int) -> Result<Int, MathError> {
     if (b == 0) {
         return Result(error: .DivisionByZero)
     }

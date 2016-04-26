@@ -47,7 +47,7 @@ public let MaxStackDepthExecutionContext: ExecutionContext = { task in
         static let maxTaskDepth = 20
     }
     
-    let localThreadDictionary = NSThread.currentThread().threadDictionary
+    let localThreadDictionary = NSThread.current().threadDictionary
     
     var previousDepth: Int
     if let depth = localThreadDictionary[Static.taskDepthKey] as? Int {
@@ -67,12 +67,12 @@ public let MaxStackDepthExecutionContext: ExecutionContext = { task in
 
 
 /// Creates an asynchronous ExecutionContext bound to the given queue
-public func toContext(queue: Queue) -> ExecutionContext {
+public func toContext(_ queue: Queue) -> ExecutionContext {
     return queue.context
 }
 
 /// Creates an asynchronous ExecutionContext bound to the given queue
-public func toContext(queue: dispatch_queue_t) -> ExecutionContext {
+public func toContext(_ queue: dispatch_queue_t) -> ExecutionContext {
     return Queue(queue: queue).context
 }
 

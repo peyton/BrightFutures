@@ -66,7 +66,7 @@ public class Semaphore {
     /// Performs the wait operation on this semaphore until the timeout
     /// Returns 0 if the semaphore was signalled before the timeout occurred
     /// or non-zero if the timeout occurred.
-    public func wait(timeout: TimeInterval) -> Int {
+    public func wait(_ timeout: TimeInterval) -> Int {
         return dispatch_semaphore_wait(self.underlyingSemaphore, timeout.dispatchTime)
     }
     
@@ -76,7 +76,7 @@ public class Semaphore {
     }
 
     /// Executes the given closure between a `self.wait()` and `self.signal()`
-    public func execute(@noescape task: () -> Void) {
+    public func execute( task: @noescape() -> Void) {
         self.wait()
         task()
         self.signal()

@@ -19,7 +19,7 @@ class PromiseTests: XCTestCase {
             p.success(fibonacci(10))
         }
         
-        let e = self.expectationWithDescription("complete expectation")
+        let e = self.expectation(withDescription: "complete expectation")
         
         p.future.onComplete { result in
             switch result {
@@ -31,8 +31,8 @@ class PromiseTests: XCTestCase {
             
             e.fulfill()
         }
-        
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+    
+        self.waitForExpectations(withTimeout: 2, handler: nil)
     }
     
     func testFailurePromise() {
@@ -42,7 +42,7 @@ class PromiseTests: XCTestCase {
             p.tryFailure(TestError.JustAnError)
         }
         
-        let e = self.expectationWithDescription("complete expectation")
+        let e = self.expectation(withDescription: "complete expectation")
         
         p.future.onComplete { result in
             switch result {
@@ -55,7 +55,7 @@ class PromiseTests: XCTestCase {
             e.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+        self.waitForExpectations(withTimeout: 2, handler: nil)
     }
     
     func testCompletePromise() {

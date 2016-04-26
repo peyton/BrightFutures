@@ -24,37 +24,37 @@ import Foundation
 import Result
 
 /// Executes the given task on `Queue.global` and wraps the result of the task in a Future
-public func future<T>(@autoclosure(escaping) task: () -> T) -> Future<T, NoError> {
+public func future<T>(_ task: @autoclosure(escaping) () -> T) -> Future<T, NoError> {
     return future(Queue.global.context, task: task)
 }
 
 /// Executes the given task on `Queue.global` and wraps the result of the task in a Future
-public func future<T>(task: () -> T) -> Future<T, NoError> {
+public func future<T>(_ task: () -> T) -> Future<T, NoError> {
     return future(Queue.global.context, task: task)
 }
 
 /// Executes the given task on the given context and wraps the result of the task in a Future
-public func future<T>(context: ExecutionContext, task: () -> T) -> Future<T, NoError> {
-    return future(context: context) { () -> Result<T, NoError> in
+public func future<T>(_ context: ExecutionContext, task: () -> T) -> Future<T, NoError> {
+    return future(context) { () -> Result<T, NoError> in
         return Result(value: task())
     }
 }
 
 /// Executes the given task on `Queue.global` and wraps the result of the task in a Future
-public func future<T, E>(@autoclosure(escaping) task: () -> Result<T, E>) -> Future<T, E> {
-    return future(context: Queue.global.context, task: task)
+public func future<T, E>(_ task: @autoclosure(escaping)() -> Result<T, E>) -> Future<T, E> {
+    return future(Queue.global.context, task: task)
 }
 
 /// Executes the given task on `Queue.global` and wraps the result of the task in a Future
-public func future<T, E>(task: () -> Result<T, E>) -> Future<T, E> {
-    return future(context: Queue.global.context, task: task)
+public func future<T, E>(_ task: () -> Result<T, E>) -> Future<T, E> {
+    return future(Queue.global.context, task: task)
 }
 
 /// Executes the given task on the given context and wraps the result of the task in a Future
-public func future<T, E>(context c: ExecutionContext, task: () -> Result<T, E>) -> Future<T, E> {
+public func future<T, E>(_ context: ExecutionContext, task: () -> Result<T, E>) -> Future<T, E> {
     let future = Future<T, E>();
     
-    c {
+    context {
         future.complete(task())
     }
     
@@ -109,7 +109,7 @@ public func future<T>(method: (T -> Void) -> Void) -> Future<T, NoError> {
 /// subsequent actions (e.g. map, flatMap, recover, andThen, etc.).
 ///
 /// For more info, see the project README.md
-public final class Future<T, E: ErrorType>: Async<Result<T, E>> {
+public final class Future<T, E: ErrorProtocol>: Async<Result<T, E>> {
     
     public typealias CompletionCallback = (result: Result<T,E>) -> Void
     public typealias SuccessCallback = T -> Void
@@ -139,7 +139,7 @@ public final class Future<T, E: ErrorType>: Async<Result<T, E>> {
         self.init(result: Result(error: error))
     }
     
-    public required init(@noescape resolver: (result: Value -> Void) -> Void) {
+    public required init(resolver: @noescape (result: Value -> Void) -> Void) {
         super.init(resolver: resolver)
     }
     
@@ -147,7 +147,7 @@ public final class Future<T, E: ErrorType>: Async<Result<T, E>> {
 
 /// Short-hand for `lhs.recover(rhs())`
 /// `rhs` is executed according to the default threading model (see README.md)
-public func ?? <T, E>(lhs: Future<T, E>, @autoclosure(escaping) rhs: () -> T) -> Future<T, NoError> {
+public func ?? <T, E>(lhs: Future<T, E>, rhs: @autoclosure(escaping) () -> T) -> Future<T, NoError> {
     return lhs.recover(context: DefaultThreadingModel(), task: { _ in
         return rhs()
     })
@@ -155,7 +155,7 @@ public func ?? <T, E>(lhs: Future<T, E>, @autoclosure(escaping) rhs: () -> T) ->
 
 /// Short-hand for `lhs.recoverWith(rhs())`
 /// `rhs` is executed according to the default threading model (see README.md)
-public func ?? <T, E, E1>(lhs: Future<T, E>, @autoclosure(escaping) rhs: () -> Future<T, E1>) -> Future<T, E1> {
+public func ?? <T, E, E1>(lhs: Future<T, E>, rhs: @autoclosure(escaping) () -> Future<T, E1>) -> Future<T, E1> {
     return lhs.recoverWith(context: DefaultThreadingModel(), task: { _ in
         return rhs()
     })

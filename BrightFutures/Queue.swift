@@ -70,7 +70,7 @@ public struct Queue {
     
     /// Synchronously executes the given closure on this queue.
     /// Analogous to dispatch_sync(self.underlyingQueue, block)
-    public func sync(block: () -> Void) {
+    public func sync(_ block: () -> Void) {
         dispatch_sync(underlyingQueue, block)
     }
     
@@ -78,8 +78,8 @@ public struct Queue {
     /// If the closure throws an error, the error is rethrown to the caller.
     /// Note: we cannot use the rethrows key here because we are not
     /// directly executing the closure. (It is passed to `dispatch_sync`)
-    public func sync(block: () throws -> Void) throws {
-        var error: ErrorType?
+    public func sync(_ block: () throws -> Void) throws {
+        var error: ErrorProtocol?
         
         sync {
             do {
@@ -96,7 +96,7 @@ public struct Queue {
     
     /// Synchronously executes the given closure on this queue and returns
     /// the return value of the given closure.
-    public func sync<T>(block: () -> T) -> T {
+    public func sync<T>(_ block: () -> T) -> T {
         var res: T? = nil
 
         sync {
@@ -108,13 +108,13 @@ public struct Queue {
     
     /// Asynchronously executes the given closure on this queue.
     /// Analogous to dispatch_async(self.underlyingQueue, block)
-    public func async(block: () -> Void) {
+    public func async(_ block: () -> Void) {
         dispatch_async(underlyingQueue, block)
     }
     
     /// Asynchronously executes the given closure on this queue and
     /// returns a future that will succeed with the result of the closure.
-    public func async<T>(block: () -> T) -> Future<T, NoError> {
+    public func async<T>(_ block: () -> T) -> Future<T, NoError> {
         return Future { complete in
             async {
                 complete(.Success(block()))
@@ -124,14 +124,14 @@ public struct Queue {
     
     /// Asynchronously executes the given closure on the queue after a delay
     /// Identical to dispatch_after(dispatch_time, self.underlyingQueue, block)
-    public func after(delay: TimeInterval, block: () -> Void) {
+    public func after(_ delay: TimeInterval, block: () -> Void) {
         dispatch_after(delay.dispatchTime, underlyingQueue, block)
     }
     
     /// Asynchronously executes the given closure on the queue after a delay
     /// and returns a future that will succeed with the result of the closure.
     /// Identical to dispatch_after(dispatch_time, self.underlyingQueue, block)
-    public func after<T>(delay: TimeInterval, block: () -> T) -> Future<T, NoError> {
+    public func after<T>(_ delay: TimeInterval, block: () -> T) -> Future<T, NoError> {
         return Future { complete in
             after(delay) {
                 complete(.Success(block()))

@@ -51,7 +51,7 @@ class ExecutionContextTests: XCTestCase {
             }
         }
         
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+        self.waitForExpectations(withTimeout: 2, handler: nil)
     }
     
     func testDispatchQueueToContext() {
@@ -78,11 +78,11 @@ class ExecutionContextTests: XCTestCase {
             e2.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2, handler: nil)
+        self.waitForExpectations(withTimeout: 2, handler: nil)
     }
     
-    func getMutablePointer (object: AnyObject) -> UnsafeMutablePointer<Void> {
-        return UnsafeMutablePointer<Void>(bitPattern: Int(ObjectIdentifier(object).uintValue))
+    func getMutablePointer(_ object: AnyObject) -> UnsafeMutablePointer<Void> {
+        return UnsafeMutablePointer<Void>(bitPattern: UInt(ObjectIdentifier(object)))!
     }
     
 }
