@@ -23,3 +23,6 @@ DerivedData
 .idea/
 Podfile.lock
 *.xcscmblueprint
+
+.build
+Packages/
