@@ -221,6 +221,18 @@ public extension AsyncType where Value: ResultType, Value.Value: AsyncType, Valu
     
 }
 
+public extension AsyncType where Value: ResultType {
+    
+    public func andThen<V>(context c: ExecutionContext = DefaultThreadingModel(), callback: Self.Value -> Async<V>) -> Async<V> {
+        let ret = Async<V>()
+        onComplete(c) { result in
+            ret.completeWith(callback(result))
+        }
+        return ret
+    }
+    
+}
+
 public extension AsyncType where Value: ResultType, Value.Error == NoError {
     /// 'promotes' a `Future` with error type `NoError` to a `Future` with an error type of choice.
     /// This allows the `Future` to be used more easily in combination with other futures
