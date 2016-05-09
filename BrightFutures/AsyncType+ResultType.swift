@@ -223,7 +223,7 @@ public extension AsyncType where Value: ResultType, Value.Value: AsyncType, Valu
 
 public extension AsyncType where Value: ResultType {
     
-    public func then<V>(context c: ExecutionContext = DefaultThreadingModel, callback: Value.Value -> Async<Result<V, Value.Error>>) -> Async<Result<V, Value.Error>> {
+    public func then<V>(context c: ExecutionContext = DefaultThreadingModel(), callback: Value.Value -> Async<Result<V, Value.Error>>) -> Async<Result<V, Value.Error>> {
         let ret = Async<Result<V, Value.Error>>()
         
         onSuccess(c) { val in
